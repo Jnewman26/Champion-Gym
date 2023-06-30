@@ -13,4 +13,11 @@ class SignInController extends Controller
 
         ]);
     }
+
+    public function member()
+    {
+        return Inertia::render('MemberApp/SignIn', [
+
+        ]);
+    }
 }
