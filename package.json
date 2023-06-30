@@ -18,6 +18,9 @@
     },
     "dependencies": {
         "@inertiajs/vue3": "^1.0.9",
-        "flowbite": "^1.6.6"
+        "chart.js": "^4.3.0",
+        "datatables.net-vue3": "^2.1.1",
+        "flowbite": "^1.6.6",
+        "vue-chartjs": "^5.2.0"
     }
 }

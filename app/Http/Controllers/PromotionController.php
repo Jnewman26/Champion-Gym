@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class DashboardController extends Controller
+class PromotionController extends Controller
 {
     public function index()
     {
-        return Inertia::render('AdminApp/Dashboard', [
-            
+        return Inertia::render('AdminApp/Promotion', [
+
         ]);
     }
 }
