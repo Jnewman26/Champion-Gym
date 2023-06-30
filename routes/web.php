@@ -36,7 +36,7 @@ Route::get('/signin-admin', [SignInController::class, 'admin']);
 Route::get('/signin-member', [SignInController::class, 'member']);
 
 // member
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/home', [HomeController::class, 'index']);
 Route::get('/calendar', [CalendarController::class, 'index']);
 Route::get('/member', [MemberController::class, 'member']);
 Route::get('/membership', [MembershipController::class, 'index']);

@@ -24,8 +24,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/member" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
-                        :class="{ active: activePage === 'member' }">
+                    <a href="/member-admin" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
+                        :class="{ active: activePage === 'member-admin' }">
                         <i class="fa-solid fa-dumbbell"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">Member</span>
                     </a>

@@ -8,6 +8,7 @@
     </div>
 
     <BottomNavigation />
+    <div class="h-24"></div>
 </template>
 
 <script setup>
