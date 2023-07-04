@@ -33,7 +33,7 @@
                 Member
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
-            <a href="/membership" data-tooltip-target="tooltip-settings" type="button"
+            <a href="/membership-member" data-tooltip-target="tooltip-settings" type="button"
                 class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
                 <i class="fad fa-bag-shopping text-slate-500 text-2xl" :class="{ activeBottom: activePage === 'membership' }"></i>
                 <div v-if="activePage === 'membership'" class="p-0.5 bg-rose-500 rounded-full -mb-1"></div>

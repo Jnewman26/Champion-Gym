@@ -31,17 +31,17 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/personal-trainer-admin" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
-                        :class="{ active: activePage === 'personal-trainer-admin' }">
+                    <a href="/personal-trainer" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
+                        :class="{ active: activePage === 'personal-trainer' }">
                         <i class="fa-solid fa-person"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">Personal Trainer</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/packages" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
-                        :class="{ active: activePage === 'packages' }">
+                    <a href="/membership-admin" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
+                        :class="{ active: activePage === 'membership-admin' }">
                         <i class="fa-solid fa-layer-group"></i>
-                        <span class="flex-1 ml-3 whitespace-nowrap">Packages</span>
+                        <span class="flex-1 ml-3 whitespace-nowrap">Membership</span>
                     </a>
                 </li>
                 <li>

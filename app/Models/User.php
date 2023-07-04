@@ -10,36 +10,48 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    protected $table = 'member';
+    protected $primaryKey = 'member_id';
+    protected $keyType = 'string';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'member_id',
+        'member_first_name',
+        'member_last_name',
+        'member_ktp',
+        'member_email',
+        'member_phone_number',
+        'member_password',
+        'member_join_date',
+        'member_updated',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public $timestamps = false;
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function getAuthIdentifierName()
+    {
+        return 'member_id';
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->USER_PASSWORD;
+    }
+
+    public function getRememberToken()
+    {
+    }
+
+    public function setRememberToken($value)
+    {
+    }
+
+    public function getRememberTokenName()
+    {
+    }
 }

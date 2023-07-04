@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Packages extends Model
+class Sales extends Model
 {
-    protected $table = 'packages';
-    protected $primaryKey = 'id';
+    protected $table = 'sales';
+    protected $primaryKey = 'sales_id';
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id',
-        'name',
-        'duration',
-        'price'
+        'sales_id',
+        'sales_total',
+        'payment_type',
+        'sales_status',
+        'payment_date_created',
     ];
     public $timestamps = false;
 }
