@@ -4,9 +4,9 @@
         aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             <ul class="space-y-3 font-medium text-slate-600">
-                <span
-                    class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded border border-red-400">Super
-                    Admin</span>
+                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded border border-red-400">
+                    {{ admin_role }}
+                </span>
                 <li>
                     <a href="/dashboard" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
                         :class="{ active: activePage === 'dashboard' }">
@@ -51,13 +51,25 @@
                         <span class="flex-1 ml-3 whitespace-nowrap">Promotion</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/admin" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
-                        :class="{ active: activePage === 'admin' }">
-                        <i class="fa-solid fa-user-tie-hair-long"></i>
-                        <span class="flex-1 ml-3 whitespace-nowrap">Admin</span>
-                    </a>
-                </li>
+                <div v-if="admin_role == 'super admin'">
+                    <li>
+                        <a href="/admin" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
+                            :class="{ active: activePage === 'admin' }">
+                            <i class="fa-solid fa-user-tie-hair-long"></i>
+                            <span class="flex-1 ml-3 whitespace-nowrap">Admin</span>
+                        </a>
+                    </li>
+                </div>
+                <div v-else>
+                    <li>
+                        <a data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+                            class="flex items-center p-2 rounded-lg hover:bg-gray-100 cursor-pointer"
+                            :class="{ active: activePage === 'admin' }">
+                            <i class="fa-solid fa-user-tie-hair-long"></i>
+                            <span class="flex-1 ml-3 whitespace-nowrap">Admin</span>
+                        </a>
+                    </li>
+                </div>
                 <li>
                     <a href="/bookkeeping" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
                         :class="{ active: activePage === 'bookkeeping' }">
@@ -83,7 +95,8 @@
             <div id="dropdown-cta" class="p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900" role="alert">
                 <div class="flex items-center mb-3">
                     <span
-                        class="bg-orange-100 text-orange-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-900">How to use</span>
+                        class="bg-orange-100 text-orange-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-900">How
+                        to use</span>
                     <button type="button"
                         class="ml-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-900 rounded-lg focus:ring-2 focus:ring-blue-400 p-1 hover:bg-blue-200 inline-flex h-6 w-6 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800"
                         data-dismiss-target="#dropdown-cta" aria-label="Close">
@@ -97,13 +110,40 @@
                     </button>
                 </div>
                 <p class="mb-3 text-sm text-blue-800 dark:text-blue-400">
-                    See the guide book below if you have any trouble of using this application! You can download the guide book by press the link.
+                    See the guide book below if you have any trouble of using this application! You can download the guide
+                    book by press the link.
                 </p>
                 <a class="text-sm text-blue-800 underline font-medium hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                     href="#">Download guide book</a>
             </div>
         </div>
     </aside>
+
+    <!-- Main modal -->
+    <div id="defaultModal" tabindex="-1" aria-hidden="true"
+        class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full bg-slate-500/75">
+        <div class="relative w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow">
+                <!-- Modal header -->
+                <div class="flex items-start justify-between p-4 rounded-lg bg-red-100 border-red-500">
+                    <h3 class="text-xl font-semibold text-red-500">
+                        Only super admin can access this menu!
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="defaultModal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -113,4 +153,23 @@ import { computed } from 'vue'
 const activePage = computed(() => {
     return window.location.pathname.split('/')[1]
 })
+</script>
+
+<script>
+export default {
+    computed: {
+        auth() {
+            return this.$page.props.auth;
+        },
+        admin_id() {
+            return this.auth ? this.auth.admin_id : null;
+        },
+        admin_name() {
+            return this.auth ? this.auth.admin_name : null;
+        },
+        admin_role() {
+            return this.auth ? this.auth.admin_role : null;
+        }
+    },
+}
 </script>

@@ -3,6 +3,19 @@
     <Sidebar />
 
     <DashboardLayout>
+        <div v-if="$page.props.flash.message" tabindex="-1" class="success-alert">
+            <div class="flex flex-col items-start mb-3 mr-4 md:items-center md:flex-row md:mb-0">
+                <p class="flex items-center text-sm font-normal">
+                    {{ $page.props.flash.message }}
+                </p>
+            </div>
+            <div class="flex items-center flex-shrink-0">
+                <button>
+                    <i class="fas fa-times" @click="closeBanner"></i>
+                </button>
+            </div>
+        </div>
+
         <h1 class="text-xl font-medium text-slate-500 mt-14 mb-5">Dashboard</h1>
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -86,6 +99,37 @@ export default {
         // Chart
         salesDatesAllBranch: Array,
         totalSalesDataAllBranch: Array,
+    },
+    computed: {
+        auth() {
+            return this.$page.props.auth;
+        },
+        admin_id() {
+            return this.auth ? this.auth.admin_id : null;
+        },
+        admin_name() {
+            return this.auth ? this.auth.admin_name : null;
+        },
+        admin_role() {
+            return this.auth ? this.auth.admin_role : null;
+        }
+    },
+    watch: {
+        '$page.props.flash.message': {
+            immediate: true,
+            handler() {
+                this.autoRefresh();
+            },
+        },
+    },
+    methods: {
+        autoRefresh() {
+            if (this.$page.props.flash.message) {
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        },
     },
     components: { Navbar },
     data() {

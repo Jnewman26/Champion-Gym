@@ -3,6 +3,20 @@
     <Sidebar />
 
     <DashboardLayout>
+        
+        <div v-if="$page.props.flash.message" tabindex="-1" class="success-alert">
+            <div class="flex flex-col items-start mb-3 mr-4 md:items-center md:flex-row md:mb-0">
+                <p class="flex items-center text-sm font-normal">
+                    {{ $page.props.flash.message }}
+                </p>
+            </div>
+            <div class="flex items-center flex-shrink-0">
+                <button>
+                    <i class="fas fa-times" @click="closeBanner"></i>
+                </button>
+            </div>
+        </div>
+
         <h1 class="text-xl font-medium text-slate-500 mt-14 mb-5">Member</h1>
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
 
@@ -20,6 +34,7 @@
                 <DataTable class="display">
                     <thead>
                         <tr>
+                            <th>Payment status</th>
                             <th>Name</th>
                             <th>Member id</th>
                             <th>KTP number</th>
@@ -34,12 +49,13 @@
                     </thead>
                     <tbody>
                         <tr v-for="member in members">
+                            <td>test</td>
                             <td>
                                 <h1>{{ member.member_first_name }}</h1>
                                 <h1 class="hidden">{{ member.member_id }}</h1>
                             </td>
                             <td>
-                                <svg class="w-80" :ref="`barcode_${member.member_id}`"></svg>
+                                
                             </td>
                             <td>{{ member.member_ktp }}</td>
                             <td>{{ member.member_email }}</td>
@@ -57,6 +73,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th>Payment status</th>
                             <th>Name</th>
                             <th>Member id</th>
                             <th>KTP number</th>
@@ -106,6 +123,9 @@
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First name</label>
                             <input type="text" name="firstName" id="firstName" class="input" placeholder="John"
                                 v-model="member.member_first_name">
+                            <p class="text-rose-500 text-xs mt-1 -mb-2" v-if="errors.member_first_name">
+                                {{ errors.member_first_name }}
+                            </p>
                         </div>
                         <div>
                             <label for="lastName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last
@@ -118,18 +138,26 @@
                                 number</label>
                             <input type="number" name="ktp" id="ktp" class="input" placeholder="number of id card"
                                 v-model="member.member_ktp">
+                            <p class="text-rose-500 text-xs mt-1 -mb-2" v-if="errors.member_ktp">
+                                {{ errors.member_ktp }}
+                            </p>
                         </div>
                         <div>
                             <label for="email"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                            <input type="email" name="email" id="email" class="input" placeholder="johndoe@gmail.com"
-                                v-model="member.member_email">
+                            <input type="email" class="input" placeholder="johndoe@gmail.com" v-model="member.member_email">
+                            <p class="text-rose-500 text-xs mt-1 -mb-2" v-if="errors.member_email">
+                                {{ errors.member_email }}
+                            </p>
                         </div>
                         <div>
                             <label for="phoneNumber"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number</label>
-                            <input type="number" name="phoneNumber" id="phoneNumber" class="input" placeholder="08123456789"
+                            <input type="number" class="input" placeholder="08123456789"
                                 v-model="member.member_phone_number">
+                            <p class="text-rose-500 text-xs mt-1 -mb-2" v-if="errors.member_phone_number">
+                                {{ errors.member_phone_number }}
+                            </p>
                         </div>
                         <div>
                             <label for="membership"
@@ -139,6 +167,9 @@
                                     {{ membership.membership_name }} - {{ membership.membership_duration }} month
                                 </option>
                             </select>
+                            <p class="text-rose-500 text-xs mt-1 -mb-2" v-if="errors.membership_name">
+                                {{ errors.membership_name }}
+                            </p>
                         </div>
                         <div>
                             <label for="promo"
@@ -167,6 +198,9 @@
                                 Start membership
                             </label>
                             <input v-model="member.member_join_date" type="date" name="date" id="date" class="input">
+                            <p class="text-rose-500 text-xs mt-1 -mb-2" v-if="errors.member_join_date">
+                                {{ errors.member_join_date }}
+                            </p>
                         </div>
                         <div>
                             <label for="date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -181,12 +215,18 @@
                                 <option value="Debit Card">Debit Card</option>
                                 <option value="Cerdit Card">Cerdit Card</option>
                             </select>
+                            <p class="text-rose-500 text-xs mt-1 -mb-2" v-if="errors.member_payment_type">
+                                {{ errors.member_payment_type }}
+                            </p>
                         </div>
                         <div class="col-span-2">
                             <label for="date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                 Password
                             </label>
                             <input type="password" class="input" v-model="member.member_password">
+                            <p class="text-rose-500 text-xs mt-1 -mb-2" v-if="errors.member_password">
+                                {{ errors.member_password }}
+                            </p>
                         </div>
                         <div class="col-span-2">
                             <label for="description"
@@ -235,7 +275,8 @@ export default {
         members: Array,
         membership: Array,
         promotion: Array,
-        personalTrainer: Array
+        personalTrainer: Array,
+        errors: Array
     },
     mounted() {
         this.generateBarcodes();
@@ -250,6 +291,7 @@ export default {
                 member_phone_number: '',
                 member_password: '',
                 membership_name: '',
+                membership_price: '',
                 promotion_discount: '',
                 personal_trainer_price: '',
                 member_join_date: '',
@@ -263,6 +305,9 @@ export default {
         }
     },
     watch: {
+        mounted() {
+            this.autoRefresh();
+        },
         '$page.props.flash.message': {
             immediate: true,
             handler() {
@@ -274,9 +319,14 @@ export default {
         selectedPromotion: 'updateMemberPromo',
         'member.member_join_date': 'updateMemberEndDate',
         selectedDuration: 'updateMemberEndDate',
+        // selectedDuration(newVal) {
+        //     this.updateSalesTotal();
+        //     this.updateMembershipName(newVal);
+        // },
         selectedDuration(newVal) {
             this.updateSalesTotal();
             this.updateMembershipName(newVal);
+            this.updateMembershipPrice(newVal);
         },
         selectedPersonalTrainer: 'updatePersonalTrainerPrice',
     },
@@ -301,6 +351,9 @@ export default {
         },
         updateMembershipName(newVal) {
             this.member.membership_name = newVal ? newVal.membership_name : '';
+        },
+        updateMembershipPrice(newVal) {
+            this.member.membership_price = newVal ? newVal.membership_price : '';
         },
         updatePersonalTrainerPrice() {
             this.member.personal_trainer_price = this.selectedPersonalTrainer ? this.selectedPersonalTrainer.personal_trainer_price : '';
@@ -345,6 +398,13 @@ export default {
                     displayValue: true, // Ubah menjadi true
                 });
             });
+        },
+        autoRefresh() {
+            if (this.$page.props.flash.message) {
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            }
         },
     }
 }

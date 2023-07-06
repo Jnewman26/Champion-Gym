@@ -1,4 +1,4 @@
-<template>toggl
+<template>
     <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
@@ -180,7 +180,7 @@
                             <span class="sr-only">Open user menu</span>
                             <img class="w-8 h-8 mr-2 bg-rose-500 rounded-full"
                                 src="@/Assets/Images/Illustration/profile-1.png" alt="user photo">
-                            Bonnie
+                            {{ admin_name }}
                             <svg class="w-4 h-4 mx-1.5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
@@ -193,8 +193,8 @@
                         <div id="dropdownAvatarName"
                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                             <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                                <div class="font-medium ">Super Admin</div>
-                                <div class="truncate">Bonnie</div>
+                                <div class="font-medium ">{{ admin_role }}</div>
+                                <div class="truncate">{{ admin_name }}</div>
                             </div>
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                 aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
@@ -212,9 +212,10 @@
                                 </li>
                             </ul>
                             <div class="py-2">
-                                <a href="#"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign
-                                    out</a>
+                                <Link href="/logout" method="post"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                                    Sign out
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -225,5 +226,24 @@
 </template>
 
 <script setup>
+import { Link } from '@inertiajs/vue3';
+</script>
 
+<script>
+export default {
+    computed: {
+        auth() {
+            return this.$page.props.auth;
+        },
+        admin_id() {
+            return this.auth ? this.auth.admin_id : null;
+        },
+        admin_name() {
+            return this.auth ? this.auth.admin_name : null;
+        },
+        admin_role() {
+            return this.auth ? this.auth.admin_role : null;
+        }
+    },
+}
 </script>
