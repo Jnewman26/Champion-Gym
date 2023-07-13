@@ -15,6 +15,13 @@
                     </a>
                 </li>
                 <li>
+                    <a href="/presence" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
+                        :class="{ active: activePage === 'presence' }">
+                        <i class="fa-solid fa-scanner-gun"></i>
+                        <span class="flex-1 ml-3 whitespace-nowrap">Presence</span>
+                    </a>
+                </li>
+                <li>
                     <a href="/notification-admin" class="flex items-center p-2 rounded-lg hover:bg-gray-100"
                         :class="{ active: activePage === 'notification-admin' }">
                         <i class="fas fa-bell"></i>

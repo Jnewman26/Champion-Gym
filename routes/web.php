@@ -41,23 +41,36 @@ Route::post('/logout', [SignInController::class, 'destroy'])->middleware('auth')
 Route::get('/signin-member', [SignInController::class, 'member'])->name('login-member');
 
 Route::group(['middleware' => ['auth:member']], function () {
-// member
-Route::get('/home', [HomeController::class, 'index']);
-Route::get('/calendar', [CalendarController::class, 'index']);
-Route::get('/member', [MemberController::class, 'member']);
-Route::get('/membership-member', [MembershipController::class, 'member']);
-Route::get('/profile', [ProfileController::class, 'index']);
+    // member
+    Route::get('/home', [HomeController::class, 'index']);
+    Route::get('/calendar', [CalendarController::class, 'index']);
+    Route::get('/member', [MemberController::class, 'member']);
+    Route::get('/membership-member', [MembershipController::class, 'member']);
+    Route::get('/profile', [ProfileController::class, 'index']);
 });
 
 Route::group(['middleware' => ['auth']], function () {
     // admin
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Presence admin route
+    Route::get('/presence', [CalendarController::class, 'index'])->name('presence');
+    // member admin add
+    Route::post('/presence', [CalendarController::class, 'calendarStore']);
+
     Route::get('/notification-admin', [NotificationController::class, 'admin']);
 
     // member admin route //
     Route::get('/member-admin', [MemberController::class, 'admin'])->name('member');
     // member admin add
     Route::post('/member-admin', [MemberController::class, 'memberStore']);
+    // member admin renew
+    Route::post('/member-admin-renew', [MemberController::class, 'memberRenew']);
+    // member admin edit
+    Route::put('/member-admin-edit/{member_id}', [MemberController::class, 'memberUpdate']);
+    Route::get('/member-admin-edit/{member_id}/edit', [MemberController::class, 'memberShow']);
+    // member admin delete
+    Route::delete('/member-admin-delete/{member_id}', [MemberController::class, 'memberDelete']);
 
     // personal trainer route //
     // personal trainer admin

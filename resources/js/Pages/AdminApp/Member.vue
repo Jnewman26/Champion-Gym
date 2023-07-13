@@ -3,7 +3,7 @@
     <Sidebar />
 
     <DashboardLayout>
-        
+
         <div v-if="$page.props.flash.message" tabindex="-1" class="success-alert">
             <div class="flex flex-col items-start mb-3 mr-4 md:items-center md:flex-row md:mb-0">
                 <p class="flex items-center text-sm font-normal">
@@ -26,9 +26,6 @@
                         <button data-modal-toggle="createMember" class="btn-primary" type="button">
                             <i class="fas fa-plus"></i> Member
                         </button>
-                        <button data-modal-toggle="createMember" class="btn-primary ms-2" type="button">
-                            <i class="fas fa-sparkles"></i> Renewal member
-                        </button>
                     </div>
                 </div>
                 <DataTable class="display">
@@ -36,38 +33,86 @@
                         <tr>
                             <th>Payment status</th>
                             <th>Name</th>
-                            <th>Member id</th>
+                            <th>member status</th>
                             <th>KTP number</th>
                             <th>Email</th>
                             <th>Phone number</th>
-                            <th>Join date</th>
-                            <th>Exp date</th>
+                            <th>Membership join date</th>
+                            <th>Membership end date</th>
                             <th>Membership type</th>
-                            <th>Renewal</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="member in members">
-                            <td>test</td>
                             <td>
-                                <h1>{{ member.member_first_name }}</h1>
+                                <div v-if="member.sales_status == 'paid'">
+                                    <span
+                                        class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400 capitalize">
+                                        {{ member.sales_status }}
+                                    </span>
+                                </div>
+                                <div v-else>
+                                    <span
+                                        class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400 capitalize">
+                                        {{ member.sales_status }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex">
+                                    <h1 class="me-2">
+                                        {{ member.member_first_name }}
+                                    </h1>
+                                    <!-- <div
+                                        v-if="member.sales_status === 'paid' && new Date(member.membership_join_date).toLocaleDateString() <= new Date().toLocaleDateString()">
+                                        <span
+                                            class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400 capitalize me-12">
+                                            active
+                                        </span>
+                                    </div>
+                                    <div v-else>
+                                        <span
+                                            class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400 capitalize flex">
+                                            Non active
+                                        </span>
+                                    </div> -->
+                                </div>
                                 <h1 class="hidden">{{ member.member_id }}</h1>
                             </td>
                             <td>
-                                
+                                <div
+                                    v-if="member.sales_status === 'paid' && new Date(member.membership_end_date) >= new Date().setHours(0, 0, 0, 0)">
+                                    <span
+                                        class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400 capitalize me-16">
+                                        active
+                                    </span>
+                                </div>
+                                <div v-else>
+                                    <div class="flex">
+                                        <span
+                                            class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400 capitalize">
+                                            Non active
+                                        </span>
+                                    </div>
+                                </div>
                             </td>
                             <td>{{ member.member_ktp }}</td>
                             <td>{{ member.member_email }}</td>
-                            <td>{{ member.member_phone_number }}</td>
-                            <td>{{ member.member_join_date }}</td>
-                            <td>2023-03-26</td>
-                            <td>Basic</td>
-                            <td>0</td>
                             <td>
-                                <button class="btn-primary ms-2" data-modal-toggle="detailMember" type="button">
+                                <div class="flex">
+                                    <div class="me-1">+62</div>
+                                    <div>{{ member.member_phone_number }}</div>
+                                </div>
+                            </td>
+                            <td>{{ member.membership_join_date }}</td>
+                            <td>{{ member.membership_end_date }}</td>
+                            <td>{{ member.membership_name }}</td>
+                            <td>
+                                <a :href="`/member-admin-edit/${member.member_id}/edit`" class="btn-primary ms-2"
+                                    data-modal-toggle="detailMember">
                                     <i class="fa-duotone fa-id-card"></i>
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -75,14 +120,13 @@
                         <tr>
                             <th>Payment status</th>
                             <th>Name</th>
-                            <th>Member id</th>
+                            <th>member status</th>
                             <th>KTP number</th>
                             <th>Email</th>
                             <th>Phone number</th>
-                            <th>Join date</th>
-                            <th>Exp date</th>
+                            <th>Membership join date</th>
+                            <th>Membership end date</th>
                             <th>Membership type</th>
-                            <th>Renewal</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -240,6 +284,7 @@
                                     <h1>Total transaction</h1>
                                     <p>Rp {{ calculatedAmount() }}</p>
                                 </div>
+                                <input type="hidden" name="salesTotal" ref="salesTotalInput" :value="calculatedAmount()">
                             </div>
                         </div>
                     </div>
@@ -261,6 +306,9 @@ import Sidebar from '@/Components/Organisms/Sidebar.vue';
 import FooterAdmin from '@/Components/Organisms/FooterAdmin.vue';
 import JsBarcode from 'jsbarcode';
 
+import dayjs from 'dayjs';
+import 'dayjs/locale/id';
+
 // datatable
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
@@ -273,6 +321,7 @@ import Qrcode from 'qrcode.vue'
 export default {
     props: {
         members: Array,
+        member_first: Array,
         membership: Array,
         promotion: Array,
         personalTrainer: Array,
@@ -296,7 +345,7 @@ export default {
                 personal_trainer_price: '',
                 member_join_date: '',
                 member_end_date: '',
-                sales_total: '',
+                sales_total: this.calculatedAmount(),
             },
             selectedDuration: '',
             selectedPromotion: '',
@@ -324,7 +373,7 @@ export default {
         //     this.updateMembershipName(newVal);
         // },
         selectedDuration(newVal) {
-            this.updateSalesTotal();
+            // this.updateSalesTotal();
             this.updateMembershipName(newVal);
             this.updateMembershipPrice(newVal);
         },
@@ -358,12 +407,12 @@ export default {
         updatePersonalTrainerPrice() {
             this.member.personal_trainer_price = this.selectedPersonalTrainer ? this.selectedPersonalTrainer.personal_trainer_price : '';
         },
-        updateSalesTotal() {
-            this.member.sales_total = this.calculatedAmount();
-        },
         updateMemberPromo() {
             this.member.promotion_discount = this.selectedPromotion;
         },
+        // updateSalesTotal() {
+        //     this.member.sales_total = this.calculatedAmount().toString();
+        // },
         calculatedAmount() {
             let totalAmount = 0;
 
@@ -382,14 +431,15 @@ export default {
             return totalAmount;
         },
         submit() {
+            // const joinDate = dayjs(this.member.member_join_date).format('DD-MM-YYYY');
+            // const endDate = dayjs(this.member.member_end_date).format('DD-MM-YYYY');
+
+            // // Atur properti dengan tanggal yang sudah diubah formatnya
+            // this.member.member_join_date = joinDate;
+            // this.member.member_end_date = endDate;
+
+            this.member.sales_total = this.$refs.salesTotalInput.value;
             this.$inertia.post('/member-admin', this.member)
-        },
-        autoRefresh() {
-            if (this.$page.props.flash.message) {
-                setTimeout(() => {
-                    location.reload();
-                }, 500);
-            }
         },
         generateBarcodes() {
             this.members.forEach((member) => {
@@ -405,6 +455,9 @@ export default {
                     location.reload();
                 }, 500);
             }
+        },
+        closeBanner() {
+            this.$page.props.flash.message = '';
         },
     }
 }
